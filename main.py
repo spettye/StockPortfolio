@@ -7,8 +7,8 @@ This is a temporary script file.
 import datetime
 import pandas_datareader.data as web
 
-start = datetime.datetime(2019, 9, 1) 
-end = datetime.datetime.now()
+start = input ("Enter start date Year, Month, Date :") 
+end = input ("Enter end date Year, Month, Date :")
 
 ticker = input ("Enter ticker symbol of stock :")
 
