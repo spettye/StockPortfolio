@@ -1,17 +1,8 @@
-# -*- coding: utf-8 -*-
-"""
-Spyder Editor
+#API key: LIUW6C1L18053KXE
 
-This is a temporary script file.
-"""
-import datetime
-import pandas_datareader.data as web
-
-start = input ("Enter start date Year, Month, Date :") 
-end = input ("Enter end date Year, Month, Date :")
-
-ticker = input ("Enter ticker symbol of stock :")
-
-df = web.DataReader(ticker, "yahoo", start, end) 
-
-print(df.head()) #prints the the first five rows from start date
+import requests
+# requesting data from the api
+data = requests.get('https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=MSFT&apikey=LIUW6C1L18053KXE')
+print(data.status_code)
+# returns data in json format
+print(data.json())
