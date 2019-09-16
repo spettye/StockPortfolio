@@ -19,9 +19,9 @@ count_companies = 0
 
 # Introduction
 
-print('##########################')
+print('#####################################################################################')
 print("Welcome to Stock Portfolio - where you can get all the data on the company you choose")
-print('##########################')
+print('#####################################################################################')
 
 
 # Getting ticker symbol for company whose data the user wants      
@@ -29,7 +29,7 @@ print('##########################')
 company_name = input('Enter the name of the company whose ticker symbol you would like to know: ')
 company_search = requests.get('https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords='+company_name+'&apikey=LIUW6C1L18053KXE')
 
-print('\n\t Finding best results for the company that you entered: ')
+print('\n\n\n\t Finding best results for the company that you entered: ')
 
 best_results = company_search.json()['bestMatches']
 
