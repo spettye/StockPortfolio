@@ -1,6 +1,9 @@
+# -*- coding: utf-8 -*-
 #API key: LIUW6C1L18053KXE
 
 import requests
+import json
+
 
 
 # requesting data from the api
@@ -39,4 +42,5 @@ company_symbol = input('Now that you have got the company you are looking for, e
 print('Data you are requesting for the company is: ')
 data = requests.get('https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+company_symbol+'&apikey=LIUW6C1L18053KXE')
 # returns data in json format
-print(data.json())
+pretty_json = json.dumps(json.loads(data.content), indent=2)
+print(pretty_json)
