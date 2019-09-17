@@ -11,78 +11,48 @@ count = 0
 count_companies = 0
 
 
-# requesting data from the api
-#data = requests.get('https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=MSFT&apikey=LIUW6C1L18053KXE')
-#print(data.status_code)
-# returns data in json format
-#print(data.json())
-
 # Introduction
-
 print('#####################################################################################')
 print("Welcome to Stock Portfolio - where you can get all the data on the company you choose")
 print('#####################################################################################')
 
 
-# Getting ticker symbol for company whose data the user wants      
-      
+# Getting ticker symbol for company whose data the user wants            
 company_name = input('Enter the name of the company whose ticker symbol you would like to know: ')
 company_search = requests.get('https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords='+company_name+'&apikey=LIUW6C1L18053KXE')
-
 print('\n\n\n\t Finding best results for the company that you entered: ')
-
 best_results = company_search.json()['bestMatches']
+
+
 
 # Tabulating company symbol data
 s = PrettyTable(['Sl.No','Symbol','Name', 'Type', 'Region','Currency','Match Score'])
 for company in best_results:
     count_companies+=1
-    s.add_row([count_companies,company['1. symbol'], company['2. name'], company['3. type'], company['4. region'], company['8. currency'], company['9. matchScore']])
-    
+    s.add_row([count_companies,company['1. symbol'], company['2. name'], company['3. type'], company['4. region'], company['8. currency'], company['9. matchScore']])    
 print(s)
 
-#for company in best_results:
-#    print('######################')
-#    print('Symbol: ' + company['1. symbol'])
-#    print('Name: ' + company['2. name'])
-#    print('Type: ' + company['3. type'])
-#    print('Region: ' + company['4. region'])
-#    print('Market Opens at: ' + company['5. marketOpen'])
-#    print('Market Closes at: ' + company['6. marketClose'])
-#    print('Timezone: ' + company['7. timezone'])
-#    print('Currency: ' + company['8. currency'])
-#    print('Match Score based on result: ' + company['9. matchScore'])
-#    print('$$$$$$$$$$$$$$$$$$$$$$')
-    
+
 
 # Getting company data based on the ticker symbol
-
 company_symbol = input('Now that you have got the company you are looking for, enter its symbol to get the data you want: ')
 print('\n\t Data you are requesting for the company with ticker symbol '+ company_symbol +' is: ')
 data = requests.get('https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+company_symbol+'&apikey=LIUW6C1L18053KXE')
-# returns data in json format
-pretty_json = json.dumps(json.loads(data.content), indent=2)
+pretty_json = json.dumps(json.loads(data.content), indent=2) # returns data in json format
 #print(pretty_json)
+print(data.json()['Time Series (Daily)'].items())
 
-#print('Data from company')
-#print(data.json()['Time Series (Daily)'])
 
 # Converting json data into a list data 
 for key,value in data.json()['Time Series (Daily)'].items():
     temp = [key,value]
     dictlist.append(temp)
 
-#print("Data for: ")
-#print(dictlist[0][0])
-#print(dictlist[0][1])
 
 # Tabulating company data
-
 t = PrettyTable(['Sl.No','Date','Open', 'High', 'Low', 'Close', 'Volume'])
-
 for values in dictlist:
     count+=1
     #print(values[1])
     t.add_row([count,values[0], values[1]['1. open'], values[1]['2. high'], values[1]['3. low'], values[1]['4. close'], values[1]['5. volume']])
-
 print(t)
