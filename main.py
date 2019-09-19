@@ -44,7 +44,7 @@ print("$$$$$$$$ Data: $$$$$$$")
 # data contains all the important information about the company. data.json() converts that data into json format.
 print(data.json())
 pretty_json = json.dumps(json.loads(data.content), indent=2) # returns data in json format
-#print(pretty_json)
+print(pretty_json)
 #print(data.json()['Time Series (Daily)'].items())
 
 
