@@ -38,9 +38,14 @@ print(s)
 company_symbol = input('Now that you have got the company you are looking for, enter its symbol to get the data you want: ')
 print('\n\t Data you are requesting for the company with ticker symbol '+ company_symbol +' is: ')
 data = requests.get('https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+company_symbol+'&apikey=LIUW6C1L18053KXE')
+print("$$$$$$$$ Data: $$$$$$$")
+
+
+# data contains all the important information about the company. data.json() converts that data into json format.
+print(data.json())
 pretty_json = json.dumps(json.loads(data.content), indent=2) # returns data in json format
 #print(pretty_json)
-print(data.json()['Time Series (Daily)'].items())
+#print(data.json()['Time Series (Daily)'].items())
 
 
 # Converting json data into a list data 
