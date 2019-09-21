@@ -5,8 +5,6 @@ import requests
 import json
 from prettytable import PrettyTable
 
-temp = []
-dictlist = []
 
 def introduction():    
     # Introduction
@@ -31,8 +29,12 @@ def getTickerSymbol():
         s.add_row([count_companies,company['1. symbol'], company['2. name'], company['3. type'], company['4. region'], company['8. currency'], company['9. matchScore']])    
     print(s)
 
+
+
 def getCompanyData():
     count = 0
+    temp = []
+    dictlist = []
     
     # Getting company data based on the ticker symbol
     company_symbol = input('Now that you have got the company you are looking for, enter its symbol to get the data you want: ')
@@ -60,11 +62,39 @@ def getCompanyData():
     print(t)
 
 
+
+def getUserChoice():
+    print("\n\n\nWhat are you interested in doing:")
+    print('1. Add Stocks to Portfolio (add)')
+    print('2. Delete Stocks from Portfolio (delete)')
+    print('3. Update stock price in Portfolio (update)')
+    print('4. Generate Portfolio Report (report)')
+    print('5. Search for a company (search)')
+    print('6. Quit (quit)')
+    
+    choice = input('Enter your choice: ')
+    return choice
+    
+
+
 def main():
     #code starts executing from here
     #print("Hello World!")
-    getTickerSymbol()
-    getCompanyData()
+   # getUserChoice()
+   introduction()
+   userChoice = getUserChoice().lower()
+   if(userChoice=="search"):
+       getTickerSymbol()
+       getCompanyData()       
+   elif((userChoice!="add") or (userChoice!="delete") or (userChoice!="update") or (userChoice!="report") or (userChoice!="quit")):
+       print('Incorrect input')
+   else:
+       print("Bingo. Correct input entered")
+   
+       
+       
+
+   print('User choice is: ' + userChoice)
 
 if __name__=="__main__":
     main()
