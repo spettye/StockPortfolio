@@ -84,7 +84,9 @@ def userChoiceResponse(userChoice):
        getTickerSymbol()
        getCompanyData() 
    elif(userChoice=="add"):
-       addPortfolioStocks()       
+       addPortfolioStocks()
+   elif(userChoice=='delete'):
+       removePortfolioStocks()
    elif((userChoice!="add") and (userChoice!="delete") and (userChoice!="update") and (userChoice!="report") and (userChoice!="quit") ):
        print('Incorrect input')
    else:
@@ -118,6 +120,31 @@ def addPortfolioStocks():
     print(userPortfolio)
     #print(type(float(purchase)))
     #print(type(float(noShares)))
+
+
+def removePortfolioStocks():
+    removeStockTicker = input('Enter company ticker symbol whose stock you would like to delete from the portfolio: ')
+    length = len(userPortfolio)
+    i=0
+    count=0
+    
+    # only deletes first instance of the stock and not all instances
+    while(i<length):
+    	if(userPortfolio[i][0]==removeStockTicker):
+            userPortfolio.remove(userPortfolio[i])
+            count+=1	
+            length = length -1 # as an element is removed so decrease the length by 1 
+            continue # run loop again to check element at same index, when item removed next item will shift to the left
+    	i = i+1
+    
+    if(count>0):
+        print('All instances of the stocks with the ticker symbol '+ removeStockTicker +' that were found in the portfolio have been removed.')
+    else:
+        print('No instance of the stock with ticker symbol ' + removeStockTicker + ' were found in the portfolio.')
+    
+    print(userPortfolio)
+            
+            
     
 
 def main():
