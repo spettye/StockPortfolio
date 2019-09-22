@@ -87,7 +87,9 @@ def userChoiceResponse(userChoice):
        addPortfolioStocks()
    elif(userChoice=='delete'):
        removePortfolioStocks()
-   elif((userChoice!="add") and (userChoice!="delete") and (userChoice!="update") and (userChoice!="report") and (userChoice!="quit") ):
+   elif(userChoice=='update'):
+       updateStockPrice()
+   elif((userChoice!="report") and (userChoice!="quit")):
        print('Incorrect input')
    else:
        print("Bingo. Correct input entered")
@@ -143,9 +145,22 @@ def removePortfolioStocks():
         print('No instance of the stock with ticker symbol ' + removeStockTicker + ' were found in the portfolio.')
     
     print(userPortfolio)
+
             
-            
+# updates only first instance of the company
+def updateStockPrice():
+    updateStockTicker = input('Enter the company ticker symbol whose stock price you want to update: ')
+    for company in userPortfolio:
+        if(company[0]==updateStockTicker):
+            updateStockPrice = float(input('Enter the updated stock price: '))
+            updateStockNumber = float(input('Enter the updated stock share number: '))
+            company[1] = updateStockNumber
+            company[2] = updateStockPrice
     
+    print(userPortfolio)
+
+
+
 
 def main():
     #code starts executing from here
