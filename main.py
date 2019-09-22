@@ -10,9 +10,9 @@ userPortfolio =[]
 
 def introduction():    
     # Introduction
-    print('#####################################################################################')
-    print("Welcome to Stock Portfolio - where you can get all the data on the company you choose")
-    print('#####################################################################################')
+    print('#####################################################################################################')
+    print("\tWelcome to Stock Portfolio - where you can get all the data on the company you choose")
+    print('#####################################################################################################')
 
 
 def getTickerSymbol():
@@ -91,10 +91,12 @@ def userChoiceResponse(userChoice):
        updateStockPrice()
    elif(userChoice=='ticker'):
        getTickerSymbol()
-   elif((userChoice!="report") and (userChoice!="quit")):
-       print('Incorrect input')
+   elif(userChoice=="report"):
+       generateUserPortfolio()
+   elif(userChoice=='quit'):
+       print('\n\n\t\t\t\t Thank you for choosing our application! We hope to see you again!!!')
    else:
-       print("Bingo. Correct input entered")
+       print("Incorrect input entered. Please enter your choice again!")
         
 
 def addPortfolioStocks():
@@ -160,6 +162,19 @@ def updateStockPrice():
             company[2] = updateStockPrice
     
     print(userPortfolio)
+    
+
+# generates user's portfolio report
+def generateUserPortfolio():
+    print('\n\n\t\t\t\t Your User Portfolio Report Is: ')
+    companyCount = 0
+    # Tabulating user Portfolio Data
+    table = PrettyTable(['Sl.No','Company Symbol', 'Shares','Purchased At', 'Latest Price', 'Value', 'Gain/Loss Percentage'])
+    for company in userPortfolio:
+        companyCount+=1
+        #print(values[1])
+        table.add_row([companyCount, company[0], company[1], company[2], company[3], company[4], company[5]])
+    print(table)
 
 
 
@@ -174,7 +189,7 @@ def main():
        userChoice = getUserChoice().lower()
        userChoiceResponse(userChoice)
    
-   print('User choice is: ' + userChoice)
+   #print('User choice is: ' + userChoice)
 
 if __name__=="__main__":
     main()
