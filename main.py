@@ -40,7 +40,7 @@ def getCompanyData():
     dictlist = []
     
     # Getting company data based on the ticker symbol
-    company_symbol = input('Now that you have got the company you are looking for, enter its symbol to get the data you want: ')
+    company_symbol = input('Enter the symbol of the company whose data you would like to get: ')
     print('\n\t Data you are requesting for the company with ticker symbol '+ company_symbol +' is: ')
     data = requests.get('https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+company_symbol+'&apikey=LIUW6C1L18053KXE')
     #print("$$$$$$$$ Data: $$$$$$$")
@@ -72,8 +72,9 @@ def getUserChoice():
     print('2. Delete Stocks from Portfolio (delete)')
     print('3. Update stock price in Portfolio (update)')
     print('4. Generate Portfolio Report (report)')
-    print('5. Search for a company profile and ticker symbol (search)')
-    print('6. Quit (quit)')
+    print('5. Search for a company profile (search)')
+    print('6. Search for a company ticker symbol (ticker)')
+    print('7. Quit (quit)')
     
     choice = input('Enter your choice: ')
     return choice
@@ -81,7 +82,6 @@ def getUserChoice():
 
 def userChoiceResponse(userChoice):
    if(userChoice=="search"):
-       getTickerSymbol()
        getCompanyData() 
    elif(userChoice=="add"):
        addPortfolioStocks()
@@ -89,6 +89,8 @@ def userChoiceResponse(userChoice):
        removePortfolioStocks()
    elif(userChoice=='update'):
        updateStockPrice()
+   elif(userChoice=='ticker'):
+       getTickerSymbol()
    elif((userChoice!="report") and (userChoice!="quit")):
        print('Incorrect input')
    else:
