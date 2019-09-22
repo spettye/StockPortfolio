@@ -5,6 +5,8 @@ import requests
 import json
 from prettytable import PrettyTable
 
+userPortfolio =[]
+
 
 def introduction():    
     # Introduction
@@ -28,6 +30,7 @@ def getTickerSymbol():
         count_companies+=1
         s.add_row([count_companies,company['1. symbol'], company['2. name'], company['3. type'], company['4. region'], company['8. currency'], company['9. matchScore']])    
     print(s)
+    
 
 
 
@@ -69,31 +72,64 @@ def getUserChoice():
     print('2. Delete Stocks from Portfolio (delete)')
     print('3. Update stock price in Portfolio (update)')
     print('4. Generate Portfolio Report (report)')
-    print('5. Search for a company (search)')
+    print('5. Search for a company profile and ticker symbol (search)')
     print('6. Quit (quit)')
     
     choice = input('Enter your choice: ')
     return choice
-    
 
+
+def userChoiceResponse(userChoice):
+   if(userChoice=="search"):
+       getTickerSymbol()
+       getCompanyData() 
+   elif(userChoice=="add"):
+       addPortfolioStocks()       
+   elif((userChoice!="add") and (userChoice!="delete") and (userChoice!="update") and (userChoice!="report") and (userChoice!="quit") ):
+       print('Incorrect input')
+   else:
+       print("Bingo. Correct input entered")
+        
+
+def addPortfolioStocks():
+    temp = []
+    dictlist = []
+    
+    getTickerSymbol()
+    userTickerSymbol = input('Enter the ticker symbol of the company that you want to add to the portfolio: ')   
+    companySearchData = requests.get('https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol='+ userTickerSymbol+'&interval=5min&apikey=LIUW6C1L18053KXE')     
+    
+    #print(companySearchData.json()['Time Series (5min)'])
+    
+    # Gets the latest value of the company to add it to the portfolio
+    for key,value in companySearchData.json()['Time Series (5min)'].items():
+        temp = [key,value]
+        dictlist.append(temp)
+    print(dictlist[0][1]['4. close'])
+    
+    latest = float(dictlist[0][1]['4. close'])
+    purchase = float(input('At that price did you purchase the stock: '))
+    noShares = float(input('How many shares did you purchase: '))
+    value = round((latest * noShares), 2)
+    percentage = round((((latest - purchase) / purchase) * 100), 2)
+    
+    userPortfolio.append([userTickerSymbol, noShares, purchase, latest, value, percentage])
+    print('User Portfolio: ')
+    print(userPortfolio)
+    #print(type(float(purchase)))
+    #print(type(float(noShares)))
+    
 
 def main():
     #code starts executing from here
     #print("Hello World!")
    # getUserChoice()
+   userChoice = ''
    introduction()
-   userChoice = getUserChoice().lower()
-   if(userChoice=="search"):
-       getTickerSymbol()
-       getCompanyData()       
-   elif((userChoice!="add") or (userChoice!="delete") or (userChoice!="update") or (userChoice!="report") or (userChoice!="quit")):
-       print('Incorrect input')
-   else:
-       print("Bingo. Correct input entered")
+   while(userChoice!='quit'):
+       userChoice = getUserChoice().lower()
+       userChoiceResponse(userChoice)
    
-       
-       
-
    print('User choice is: ' + userChoice)
 
 if __name__=="__main__":
