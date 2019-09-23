@@ -210,7 +210,7 @@ def removePortfolioStocks():
 # updates only first(oldest) instance of the company stock in the portfolio
 def updateStockPrice():
     found = False
-    print(userPortfolio)
+    #print(userPortfolio)
     updateStockTicker = input('Enter the company ticker symbol whose stock price you want to update: ')
     for company in userPortfolio:
         if(company[0]==updateStockTicker): # if company is found, update the  price and share number for that stock.
