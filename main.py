@@ -5,9 +5,12 @@ import requests
 import json
 from prettytable import PrettyTable
 
+# All user interested portfolio stocks will be stored here.
 userPortfolio =[]
 
-
+'''
+    Function: Print Introduction Element of the program.
+'''
 def introduction():    
     # Introduction
     print('#####################################################################################################')
@@ -15,6 +18,15 @@ def introduction():
     print('#####################################################################################################')
 
 
+
+
+
+
+'''
+    Function: Returns the ticker symbol of the company that the user is looking for. 
+    Input:    Takes the name of the company that the user is looking for
+    Output:   Returns the ticker symbol of the company.
+'''
 def getTickerSymbol():
     count_companies = 0
     
@@ -24,7 +36,7 @@ def getTickerSymbol():
     print('\n\n\n\t Finding best results for the company that you entered: ')
     best_results = company_search.json()['bestMatches']
         
-    # Tabulating company symbol data
+    # Tabulating company symbol data using PrettyTable
     s = PrettyTable(['Sl.No','Symbol','Name', 'Type', 'Region','Currency','Match Score'])
     for company in best_results:
         count_companies+=1
@@ -34,6 +46,12 @@ def getTickerSymbol():
 
 
 
+
+'''
+    Function: Allows to get a day by day record of the company that the user is interested in knowing about
+    Input:    Takes the ticker symbol of the company that user is interested in
+    Output:   Data includes open, high, low, close and volume information about the company
+'''
 def getCompanyData():
     count = 0
     temp = []
@@ -66,8 +84,14 @@ def getCompanyData():
 
 
 
+'''
+    Function: Determine the user's choice in order to proceed with the application.
+    Input:    Selection that the user is interested in
+'''
 def getUserChoice():
     print("\n\n\nWhat are you interested in doing:")
+    # Each print statement includes the choice available to the user as well as
+    # the command, in brackets, in order to trigger it.
     print('1. Add Stocks to Portfolio (add)')
     print('2. Delete Stocks from Portfolio (delete)')
     print('3. Update stock price in Portfolio (update)')
@@ -80,6 +104,12 @@ def getUserChoice():
     return choice
 
 
+
+'''
+    Function: Based on user choice, passes control over of the program to the respective function
+    Input:    Takes in the user selection choice
+    Output:   Passing over control to different methods depending on the user selected choice
+'''
 def userChoiceResponse(userChoice):
    if(userChoice=="search"):
        getCompanyData() 
@@ -96,14 +126,23 @@ def userChoiceResponse(userChoice):
    elif(userChoice=='quit'):
        print('\n\n\t\t\t\t Thank you for choosing our application! We hope to see you again!!!')
    else:
-       print("Incorrect input entered. Please enter your choice again!")
+       print("\nIncorrect input entered. Please enter your choice again!")
         
 
+
+'''
+    Function: Adds portfolio stocks that the user is interested in into his profile
+    Input:    Takes in the ticker symbol of the company that the user is interested in
+    Output:   Stock is added to the user's profile with important information about the company
+'''
 def addPortfolioStocks():
     temp = []
     dictlist = []
     
+    # Providing the option to the user to determine the ticker symbol of the company that they are intersted in adding to their portfolio.
     getTickerSymbol()
+    
+    # Once they have the ticker symbol, we use that info to obtain the data for the company they are intersted in knowing about
     userTickerSymbol = input('Enter the ticker symbol of the company that you want to add to the portfolio: ')   
     companySearchData = requests.get('https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol='+ userTickerSymbol+'&interval=5min&apikey=LIUW6C1L18053KXE')     
     
@@ -113,28 +152,39 @@ def addPortfolioStocks():
     for key,value in companySearchData.json()['Time Series (5min)'].items():
         temp = [key,value]
         dictlist.append(temp)
-    print(dictlist[0][1]['4. close'])
+    print('\nThe current stock price is: ' + dictlist[0][1]['4. close'])
     
+    
+    # We provide the latest stock price of the moment so that the user's stock portfolio is in real-time
     latest = float(dictlist[0][1]['4. close'])
+    # Taking in the purchase value and number of shares from the user.
     purchase = float(input('At that price did you purchase the stock: '))
     noShares = float(input('How many shares did you purchase: '))
+    # Running calculations to help the user out with their portfolio
     value = round((latest * noShares), 2)
     percentage = round((((latest - purchase) / purchase) * 100), 2)
     
+    # Stock is then added to the user's portfolio to be tracked.
     userPortfolio.append([userTickerSymbol, noShares, purchase, latest, value, percentage])
-    print('User Portfolio: ')
-    print(userPortfolio)
+    print('\n*** Stock has been successfully added to your portfolio! ***')
+    #print('User Portfolio: ')
+    #print(userPortfolio)
     #print(type(float(purchase)))
     #print(type(float(noShares)))
 
 
+'''
+    Function: Removes all instances of the stock from the user's portfolio depending on user's choice
+    Input:    Takes in the company ticker symbol which the user wants to remove from the portfolio
+    Output:   Stock is deleted from the user's stock portfolio if it exists there.
+'''
 def removePortfolioStocks():
     removeStockTicker = input('Enter company ticker symbol whose stock you would like to delete from the portfolio: ')
     length = len(userPortfolio)
     i=0
     count=0
     
-    # only deletes first instance of the stock and not all instances
+    # deletes all instances of the stock
     while(i<length):
     	if(userPortfolio[i][0]==removeStockTicker):
             userPortfolio.remove(userPortfolio[i])
@@ -144,31 +194,49 @@ def removePortfolioStocks():
     	i = i+1
     
     if(count>0):
-        print('All instances of the stocks with the ticker symbol '+ removeStockTicker +' that were found in the portfolio have been removed.')
+        print('\n*** All instances of the stocks with the ticker symbol '+ removeStockTicker +' that were found in the portfolio have been removed! ***')
     else:
-        print('No instance of the stock with ticker symbol ' + removeStockTicker + ' were found in the portfolio.')
+        print('\n*** No instance of the stock with ticker symbol ' + removeStockTicker + ' were found in the portfolio! ***')
     
-    print(userPortfolio)
+    #print(userPortfolio)
 
-            
-# updates only first instance of the company
+          
+    
+'''
+    Function: Updates the first instance of the company stock in the portfolio
+    Input:    Ticker symbol of the company whose stock price needs updating
+    Output:   User portfolio now updated with the new stock price that the user purchased at
+'''    
+# updates only first(oldest) instance of the company stock in the portfolio
 def updateStockPrice():
+    found = False
+    print(userPortfolio)
     updateStockTicker = input('Enter the company ticker symbol whose stock price you want to update: ')
     for company in userPortfolio:
-        if(company[0]==updateStockTicker):
+        if(company[0]==updateStockTicker): # if company is found, update the  price and share number for that stock.
+            found = True
             updateStockPrice = float(input('Enter the updated stock price: '))
             updateStockNumber = float(input('Enter the updated stock share number: '))
             company[1] = updateStockNumber
             company[2] = updateStockPrice
+            company[4] = round((company[3] * company[1]), 2)
+            company[5] = round((((company[3] - company[2]) / company[2]) * 100), 2)
+            break
     
-    print(userPortfolio)
+    if(found == False):
+        print('\n*** Stock could not be found with the ticker symbol provided! ***')
+    else:
+        print('\n*** Stock has been updated with the new price and share numbers! ***')
     
 
+''' Function: Prints the User's Portfolio Report based on the stocks in their portfolio
+    Output:   User's Stock Portfolio Report
+'''
 # generates user's portfolio report
 def generateUserPortfolio():
     print('\n\n\t\t\t\t Your User Portfolio Report Is: ')
     companyCount = 0
-    # Tabulating user Portfolio Data
+    # Tabulating User Portfolio Data
     table = PrettyTable(['Sl.No','Company Symbol', 'Shares','Purchased At', 'Latest Price', 'Value', 'Gain/Loss Percentage'])
     for company in userPortfolio:
         companyCount+=1
@@ -182,9 +250,10 @@ def generateUserPortfolio():
 def main():
     #code starts executing from here
     #print("Hello World!")
-   # getUserChoice()
+   #getUserChoice()
    userChoice = ''
    introduction()
+   # Keeps displaying the choices until user enters quit
    while(userChoice!='quit'):
        userChoice = getUserChoice().lower()
        userChoiceResponse(userChoice)
