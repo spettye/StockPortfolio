@@ -249,7 +249,8 @@ def generateUserPortfolio():
         #print(values[1])
         table.add_row([companyCount, company[0], company[1], company[2], company[3], company[4], company[5]])
     print(table)
-    print("\n\n Total Value of all stocks: " + str(totalValue))
+    print("\n\n Number of companies in stock portfolio: "+ str(companyCount))
+    print("\n Total Value of all stocks: " + str(totalValue))
     print("\n Total Gain/Loss Percentage: " + str(totalGL))
 
 
