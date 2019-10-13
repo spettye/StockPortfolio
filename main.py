@@ -5,6 +5,11 @@ import requests
 import json
 from prettytable import PrettyTable
 
+import matplotlib.pyplot as plt; plt.rcdefaults()
+import numpy as np
+import matplotlib.pyplot as plt
+
+
 # All user interested portfolio stocks will be stored here.
 userPortfolio =[]
 
@@ -238,11 +243,15 @@ def generateUserPortfolio():
     companyCount = 0
     totalValue = 0
     totalGL = 0
+    objects = []
+    performance = []
     # Tabulating User Portfolio Data
     table = PrettyTable(['Sl.No','Company Symbol', 'Shares','Purchased At', 'Latest Price', 'Value', 'Gain/Loss Percentage'])
     #print("This is company: ")
     for company in userPortfolio:
-        print(company)
+        objects.append(company[0])
+        performance.append(company[5])
+        
         totalValue+=company[4]
         totalGL+=company[5]
         companyCount+=1
@@ -251,7 +260,21 @@ def generateUserPortfolio():
     print(table)
     print("\n\n Number of companies in stock portfolio: "+ str(companyCount))
     print("\n Total Value of all stocks: " + str(totalValue))
-    print("\n Total Gain/Loss Percentage: " + str(totalGL))
+    print("\n Total Gain/Loss Percentage: " + str(round(totalGL)))
+    
+    
+    # Generating bar graph with respect to gain/loss percentage of each stock in the portfolio.
+    
+    y_pos = np.arange(len(objects))
+    if(len(objects) !=0 ):
+        plt.bar(y_pos, performance, align='center', alpha=0.5)
+        plt.xticks(y_pos, objects)
+        plt.ylabel('Gain/Loss Percentage')
+        plt.title('Stock Portfolio Gain/Loss Index')
+        
+        plt.show()
+    
+    
 
 
 
