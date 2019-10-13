@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt; plt.rcdefaults()
 import numpy as np
 import matplotlib.pyplot as plt 
 import matplotlib.pyplot as pltpie
+import matplotlib.pyplot as pltStockCount
 
 
 # All user interested portfolio stocks will be stored here.
@@ -246,11 +247,18 @@ def plotGainLossBarGraph(y_pos, performance, objects):
 
 def plotValuePercentage(valueIndex, objects, explode):
     pltpie.pie(valueIndex, explode=explode, labels=objects, autopct='%1.1f%%', shadow=True, startangle=90)
-    #pltpie.legend(patches, objects, loc="best")
     pltpie.axis('equal')
     pltpie.title('Portfolio Stock Value Percentage Division')
     pltpie.tight_layout()
     pltpie.show()
+
+def plotStockCountPercentage(countIndex, objects, explode):
+    pltStockCount.pie(countIndex, explode=explode, labels=objects, autopct='%1.1f%%', shadow=True, startangle=90)
+    pltStockCount.axis('equal')
+    pltStockCount.title('Portfolio Stock Share Count Percentage Division')
+    pltStockCount.tight_layout()
+    pltStockCount.show()
+    
     
 
 
@@ -269,6 +277,8 @@ def generateUserPortfolio():
     valueIndex = []
     explode = []
     
+    countIndex=[]
+    
     # Tabulating User Portfolio Data
     table = PrettyTable(['Sl.No','Company Symbol', 'Shares','Purchased At', 'Latest Price', 'Value', 'Gain/Loss Percentage'])
     #print("This is company: ")
@@ -278,6 +288,8 @@ def generateUserPortfolio():
         
         valueIndex.append(company[4])
         explode.append(0.1)
+        
+        countIndex.append(company[1])
         
         totalValue+=company[4]
         totalGL+=company[5]
@@ -292,6 +304,7 @@ def generateUserPortfolio():
     if(len(objects) !=0 ):
         plotGainLossBarGraph(y_pos, performance, objects)
         plotValuePercentage(valueIndex, objects, explode)
+        plotStockCountPercentage(countIndex, objects, explode)
     
     
     print("\n\n Number of companies in stock portfolio: "+ str(companyCount))
