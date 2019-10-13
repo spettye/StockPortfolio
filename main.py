@@ -7,7 +7,8 @@ from prettytable import PrettyTable
 
 import matplotlib.pyplot as plt; plt.rcdefaults()
 import numpy as np
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt 
+import matplotlib.pyplot as pltpie
 
 
 # All user interested portfolio stocks will be stored here.
@@ -245,6 +246,10 @@ def generateUserPortfolio():
     totalGL = 0
     objects = []
     performance = []
+    
+    valueIndex = []
+    explode = []
+    
     # Tabulating User Portfolio Data
     table = PrettyTable(['Sl.No','Company Symbol', 'Shares','Purchased At', 'Latest Price', 'Value', 'Gain/Loss Percentage'])
     #print("This is company: ")
@@ -252,16 +257,15 @@ def generateUserPortfolio():
         objects.append(company[0])
         performance.append(company[5])
         
+        valueIndex.append(company[4])
+        explode.append(0.1)
+        
         totalValue+=company[4]
         totalGL+=company[5]
         companyCount+=1
         #print(values[1])
         table.add_row([companyCount, company[0], company[1], company[2], company[3], company[4], company[5]])
     print(table)
-    print("\n\n Number of companies in stock portfolio: "+ str(companyCount))
-    print("\n Total Value of all stocks: " + str(totalValue))
-    print("\n Total Gain/Loss Percentage: " + str(round(totalGL)))
-    
     
     # Generating bar graph with respect to gain/loss percentage of each stock in the portfolio.
     
@@ -269,10 +273,25 @@ def generateUserPortfolio():
     if(len(objects) !=0 ):
         plt.bar(y_pos, performance, align='center', alpha=0.5)
         plt.xticks(y_pos, objects)
+        plt.xlabel('Portfolio Stock companies')
         plt.ylabel('Gain/Loss Percentage')
-        plt.title('Stock Portfolio Gain/Loss Index')
-        
+        plt.title('Stock Portfolio Gain/Loss Index') 
         plt.show()
+        
+        #print("Showing error")
+        #print(pltpie.pie(valueIndex, shadow=True, autopct='%1.1f%%', explode=explode, startangle=90))
+        
+        pltpie.pie(valueIndex, explode=explode, labels=objects, autopct='%1.1f%%', shadow=True, startangle=90)
+        #pltpie.legend(patches, objects, loc="best")
+        pltpie.axis('equal')
+        pltpie.title('Portfolio Stock Value Percentage Division')
+        pltpie.tight_layout()
+        pltpie.show()
+    
+    
+    print("\n\n Number of companies in stock portfolio: "+ str(companyCount))
+    print("\n Total Value of all stocks: " + str(round(totalValue,2)))
+    print("\n Total Gain/Loss Percentage: " + str(round(totalGL,2)))
     
     
 
