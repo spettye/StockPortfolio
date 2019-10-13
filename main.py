@@ -236,13 +236,21 @@ def updateStockPrice():
 def generateUserPortfolio():
     print('\n\n\t\t\t\t Your User Portfolio Report Is: ')
     companyCount = 0
+    totalValue = 0
+    totalGL = 0
     # Tabulating User Portfolio Data
     table = PrettyTable(['Sl.No','Company Symbol', 'Shares','Purchased At', 'Latest Price', 'Value', 'Gain/Loss Percentage'])
+    #print("This is company: ")
     for company in userPortfolio:
+        print(company)
+        totalValue+=company[4]
+        totalGL+=company[5]
         companyCount+=1
         #print(values[1])
         table.add_row([companyCount, company[0], company[1], company[2], company[3], company[4], company[5]])
     print(table)
+    print("\n\n Total Value of all stocks: " + str(totalValue))
+    print("\n Total Gain/Loss Percentage: " + str(totalGL))
 
 
 
