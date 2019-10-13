@@ -279,11 +279,21 @@ def generateUserPortfolio():
     
     countIndex=[]
     
+    valueObject = []
+    shareCountObject = []
+    
     # Tabulating User Portfolio Data
     table = PrettyTable(['Sl.No','Company Symbol', 'Shares','Purchased At', 'Latest Price', 'Value', 'Gain/Loss Percentage'])
     #print("This is company: ")
     for company in userPortfolio:
         objects.append(company[0])
+        
+        value = company[0] + "[" + str(company[4]) + "]"
+        valueObject.append(value)
+        share = company[0] + "["+ str(company[1]) +"]"
+        shareCountObject.append(share)
+        
+        
         performance.append(company[5])
         
         valueIndex.append(company[4])
@@ -303,8 +313,8 @@ def generateUserPortfolio():
     y_pos = np.arange(len(objects))
     if(len(objects) !=0 ):
         plotGainLossBarGraph(y_pos, performance, objects)
-        plotValuePercentage(valueIndex, objects, explode)
-        plotStockCountPercentage(countIndex, objects, explode)
+        plotValuePercentage(valueIndex, valueObject, explode)
+        plotStockCountPercentage(countIndex, shareCountObject, explode)
     
     
     print("\n\n Number of companies in stock portfolio: "+ str(companyCount))
