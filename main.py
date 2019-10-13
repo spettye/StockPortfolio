@@ -5,6 +5,12 @@ import requests
 import json
 from prettytable import PrettyTable
 
+import matplotlib.pyplot as plt; plt.rcdefaults()
+import numpy as np
+import matplotlib.pyplot as plt 
+import matplotlib.pyplot as pltpie
+
+
 # All user interested portfolio stocks will be stored here.
 userPortfolio =[]
 
@@ -227,7 +233,26 @@ def updateStockPrice():
         print('\n*** Stock could not be found with the ticker symbol provided! ***')
     else:
         print('\n*** Stock has been updated with the new price and share numbers! ***')
+ 
+
+def plotGainLossBarGraph(y_pos, performance, objects):
+    plt.bar(y_pos, performance, align='center', alpha=0.5)
+    plt.xticks(y_pos, objects)
+    plt.xlabel('Portfolio Stock companies')
+    plt.ylabel('Gain/Loss Percentage')
+    plt.title('Stock Portfolio Gain/Loss Index') 
+    plt.show()   
     
+
+def plotValuePercentage(valueIndex, objects, explode):
+    pltpie.pie(valueIndex, explode=explode, labels=objects, autopct='%1.1f%%', shadow=True, startangle=90)
+    #pltpie.legend(patches, objects, loc="best")
+    pltpie.axis('equal')
+    pltpie.title('Portfolio Stock Value Percentage Division')
+    pltpie.tight_layout()
+    pltpie.show()
+    
+
 
 ''' Function: Prints the User's Portfolio Report based on the stocks in their portfolio
     Output:   User's Stock Portfolio Report
@@ -236,13 +261,44 @@ def updateStockPrice():
 def generateUserPortfolio():
     print('\n\n\t\t\t\t Your User Portfolio Report Is: ')
     companyCount = 0
+    totalValue = 0
+    totalGL = 0
+    objects = []
+    performance = []
+    
+    valueIndex = []
+    explode = []
+    
     # Tabulating User Portfolio Data
     table = PrettyTable(['Sl.No','Company Symbol', 'Shares','Purchased At', 'Latest Price', 'Value', 'Gain/Loss Percentage'])
+    #print("This is company: ")
     for company in userPortfolio:
+        objects.append(company[0])
+        performance.append(company[5])
+        
+        valueIndex.append(company[4])
+        explode.append(0.1)
+        
+        totalValue+=company[4]
+        totalGL+=company[5]
         companyCount+=1
         #print(values[1])
         table.add_row([companyCount, company[0], company[1], company[2], company[3], company[4], company[5]])
     print(table)
+    
+    # Generating bar graph with respect to gain/loss percentage of each stock in the portfolio.
+    
+    y_pos = np.arange(len(objects))
+    if(len(objects) !=0 ):
+        plotGainLossBarGraph(y_pos, performance, objects)
+        plotValuePercentage(valueIndex, objects, explode)
+    
+    
+    print("\n\n Number of companies in stock portfolio: "+ str(companyCount))
+    print("\n Total Value of all stocks: " + str(round(totalValue,2)))
+    print("\n Total Gain/Loss Percentage: " + str(round(totalGL,2)))
+    
+    
 
 
 
