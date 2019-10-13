@@ -233,7 +233,26 @@ def updateStockPrice():
         print('\n*** Stock could not be found with the ticker symbol provided! ***')
     else:
         print('\n*** Stock has been updated with the new price and share numbers! ***')
+ 
+
+def plotGainLossBarGraph(y_pos, performance, objects):
+    plt.bar(y_pos, performance, align='center', alpha=0.5)
+    plt.xticks(y_pos, objects)
+    plt.xlabel('Portfolio Stock companies')
+    plt.ylabel('Gain/Loss Percentage')
+    plt.title('Stock Portfolio Gain/Loss Index') 
+    plt.show()   
     
+
+def plotValuePercentage(valueIndex, objects, explode):
+    pltpie.pie(valueIndex, explode=explode, labels=objects, autopct='%1.1f%%', shadow=True, startangle=90)
+    #pltpie.legend(patches, objects, loc="best")
+    pltpie.axis('equal')
+    pltpie.title('Portfolio Stock Value Percentage Division')
+    pltpie.tight_layout()
+    pltpie.show()
+    
+
 
 ''' Function: Prints the User's Portfolio Report based on the stocks in their portfolio
     Output:   User's Stock Portfolio Report
@@ -271,22 +290,8 @@ def generateUserPortfolio():
     
     y_pos = np.arange(len(objects))
     if(len(objects) !=0 ):
-        plt.bar(y_pos, performance, align='center', alpha=0.5)
-        plt.xticks(y_pos, objects)
-        plt.xlabel('Portfolio Stock companies')
-        plt.ylabel('Gain/Loss Percentage')
-        plt.title('Stock Portfolio Gain/Loss Index') 
-        plt.show()
-        
-        #print("Showing error")
-        #print(pltpie.pie(valueIndex, shadow=True, autopct='%1.1f%%', explode=explode, startangle=90))
-        
-        pltpie.pie(valueIndex, explode=explode, labels=objects, autopct='%1.1f%%', shadow=True, startangle=90)
-        #pltpie.legend(patches, objects, loc="best")
-        pltpie.axis('equal')
-        pltpie.title('Portfolio Stock Value Percentage Division')
-        pltpie.tight_layout()
-        pltpie.show()
+        plotGainLossBarGraph(y_pos, performance, objects)
+        plotValuePercentage(valueIndex, objects, explode)
     
     
     print("\n\n Number of companies in stock portfolio: "+ str(companyCount))
