@@ -31,3 +31,20 @@ Users of the application have the ability to perform multiple operations to the 
 4. Generate Portfolio Report (report).
 5. Search for a company profile (search).
 6. Search for a company ticker symbol (ticker).
+
+When the users of the application generate a portfolio report, they are also provided with bar and pie graphs that help them understand their stock portfolio better.
+
+## Future Additions
+
+While we have been happy with the work we put into the application, there are features which we were interested in adding into our application as well. However, as this was primarily a course project with a duration of 1.5 months, we were able only able to implement the fundamental features into our application. A list of possible future features that will be implemented into our application include:
+
+1. Tracking performance (daily as well as historical)
+2. Rebalancing (Obtaining original weightings of assets over time)
+3. Portfolio optimization (generating the minimum variance portfolio)
+4. Risk-adjusted metrics (Sharpe Ratio, Alpha, etc.)
+5. Portfolio Fundamentals (Beta, P/E Ratio, Dividend Yield, etc.)
+6. Graphing abilities (Correlation Heatmaps, etc.)
+7. Geographical and industry exposure8.Reporting abilities (generate and automated daily fund report)
+8. Adding filters so that users of the application only see options they are interested in.
+
+If you have ideas that you think will improve our application, please leave us a feature request and we will get to work on it after careful evaluation.
