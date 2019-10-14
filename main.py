@@ -3,8 +3,11 @@
 
 import requests
 import json
+
+# library used to generate the table format for the data
 from prettytable import PrettyTable
 
+# libraries used to generate bar and pie graph
 import matplotlib.pyplot as plt; plt.rcdefaults()
 import numpy as np
 import matplotlib.pyplot as plt 
@@ -118,6 +121,8 @@ def getUserChoice():
     Output:   Passing over control to different methods depending on the user selected choice
 '''
 def userChoiceResponse(userChoice):
+    # Based on the choice entered by the user a particular method is called in order to 
+    # perform that operation
    if(userChoice=="search"):
        getCompanyData() 
    elif(userChoice=="add"):
@@ -226,6 +231,8 @@ def updateStockPrice():
             updateStockNumber = float(input('Enter the updated stock share number: '))
             company[1] = updateStockNumber
             company[2] = updateStockPrice
+            
+            # need to recalculate the new value and gain/loss percentage since price was updated
             company[4] = round((company[3] * company[1]), 2)
             company[5] = round((((company[3] - company[2]) / company[2]) * 100), 2)
             break
@@ -236,30 +243,76 @@ def updateStockPrice():
         print('\n*** Stock has been updated with the new price and share numbers! ***')
  
 
+'''
+    Function: Plots the gain/loss percentage of each company saved in the user's portfolio in the form of a bar graph
+    Input: Takes in the number of companies in portfolio, gain/loss percentage of each stock and the name of each of the stock saved
+            the user's portfolio
+    Output: Gain/Loss Index plotted in the form of bar graph
+'''
+
 def plotGainLossBarGraph(y_pos, performance, objects):
+    # Giving the data to the graph for which it is to be plotted
+        #align -> used to align the bar graph in the center
     plt.bar(y_pos, performance, align='center', alpha=0.5)
     plt.xticks(y_pos, objects)
+    
+    # Labeling the x and y axis as well giving the bar graph a title.
     plt.xlabel('Portfolio Stock companies')
     plt.ylabel('Gain/Loss Percentage')
     plt.title('Stock Portfolio Gain/Loss Index') 
     plt.show()   
+ 
+ 
     
-
+    
+'''
+    Function: Plots the total value of each stock as a percentage value compared to the other stocks in the portfolio
+    Input: Takes in the value of each company in the portfolio, name of each company in the portfolio and
+            an array 'explode' that is used to offset each wedge of the pie chart
+    Output: Portfolio Stock Value Percentage Divison for each stock in the portfolio in the form
+            of a pie graph
+'''
 def plotValuePercentage(valueIndex, objects, explode):
+    # Passing in parameteres to the pie chart in order to plot it
+        # labels -> array of company ticker symbols
+        # autopct -> Used to indicate the no of digits displayed after decimal point in the pie graph
+        # shadow -> adds a shadow effect to the pie chart
+        # startangle -> provides the start angle for the wedge of the pie chart
     pltpie.pie(valueIndex, explode=explode, labels=objects, autopct='%1.1f%%', shadow=True, startangle=90)
     pltpie.axis('equal')
     pltpie.title('Portfolio Stock Value Percentage Division')
     pltpie.tight_layout()
+    
+    # plotting the pie chart
     pltpie.show()
 
+
+
+
+'''
+    Function: Plots the count of each stock purchased by the user and in the portfolio as a 
+              percentage division value
+    Input: Takes in the count of each stock in the portfolio, name of each company in the 
+            portfolio and an array 'explode' that is used to offset each wedge of the pie chart
+    Output: Stock count as a percentage division value of each company in the portfolio in the
+            form of a pie graph
+'''
 def plotStockCountPercentage(countIndex, objects, explode):
+    # Passing in parameteres to the pie chart in order to plot it
+        # labels -> array of company ticker symbols
+        # autopct -> Used to indicate the no of digits displayed after decimal point in the pie graph
+        # shadow -> adds a shadow effect to the pie chart
+        # startangle -> provides the start angle for the wedge of the pie chart
     pltStockCount.pie(countIndex, explode=explode, labels=objects, autopct='%1.1f%%', shadow=True, startangle=90)
     pltStockCount.axis('equal')
     pltStockCount.title('Portfolio Stock Share Count Percentage Division')
     pltStockCount.tight_layout()
+    
+    # plotting the pie chart
     pltStockCount.show()
     
     
+
 
 
 ''' Function: Prints the User's Portfolio Report based on the stocks in their portfolio
@@ -271,6 +324,19 @@ def generateUserPortfolio():
     companyCount = 0
     totalValue = 0
     totalGL = 0
+    
+    # Array variables
+        # objects -> stores the company tocker symbol
+        # performance -> stores the gain/loss percentage for each company in the portfolio
+        # valueIndex -> stores the value of each company in the portfolio
+        # explode -> array that is used to separate each of the wedges corresponding to the pie chart
+        # countIndex -> array that stores stock count of each company in the portfolio
+        # valueObject -> array that stores the company ticker symbol as well as the value of each
+        #               company in the portfolio within the same string. Used for printing out
+        #               the legend in the portfolio stock value percentage division
+        # shareCountObject -> array that stores the company ticker symbol as well as the stock count of each
+        #               company in the portfolio within the same string. Used for printing out
+        #               the legend in the portfolio stock share count percentage division
     objects = []
     performance = []
     
@@ -288,19 +354,21 @@ def generateUserPortfolio():
     for company in userPortfolio:
         objects.append(company[0])
         
+        # Storing the company ticker symbol along with the value and share count of each stock in portfolio
+        # to be used as legend in the pie charts
         value = company[0] + "[" + str(company[4]) + "]"
         valueObject.append(value)
         share = company[0] + "["+ str(company[1]) +"]"
         shareCountObject.append(share)
         
-        
+        # Stores info on the gain/loss, value and share count of each stock in the portfolio
         performance.append(company[5])
-        
         valueIndex.append(company[4])
         explode.append(0.1)
-        
         countIndex.append(company[1])
         
+        
+        # Calulate the total gain/loss and totalValue of the stock portfolio
         totalValue+=company[4]
         totalGL+=company[5]
         companyCount+=1
@@ -308,9 +376,12 @@ def generateUserPortfolio():
         table.add_row([companyCount, company[0], company[1], company[2], company[3], company[4], company[5]])
     print(table)
     
-    # Generating bar graph with respect to gain/loss percentage of each stock in the portfolio.
+    # Generating bar and pie graph with respect to gain/loss percentage, value and stock count
+    # percentage division of each stock in the portfolio.
     
     y_pos = np.arange(len(objects))
+    
+    # Only if there are companies in the portfolio should the graphs be generated
     if(len(objects) !=0 ):
         plotGainLossBarGraph(y_pos, performance, objects)
         plotValuePercentage(valueIndex, valueObject, explode)
