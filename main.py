@@ -225,6 +225,7 @@ def updateStockPrice():
     #print(userPortfolio)
     updateStockTicker = input('Enter the company ticker symbol whose stock price you want to update: ')
     for company in userPortfolio:
+        # company is a list that stores the company symbol, shares, purchased at, latest price, value and gain/loss percentage value respectively in that order.
         if(company[0]==updateStockTicker): # if company is found, update the  price and share number for that stock.
             found = True
             updateStockPrice = float(input('Enter the updated stock price: '))
