@@ -1,3 +1,4 @@
+[![Board Status](https://dev.azure.com/pettyelnlsb/33d6211d-43a2-4815-bc78-00291eb6b790/6a2248c0-5d7a-4fbb-93bd-78270e404170/_apis/work/boardbadge/dab78722-258f-4a6e-9fb8-f4193c3021b5)](https://dev.azure.com/pettyelnlsb/33d6211d-43a2-4815-bc78-00291eb6b790/_boards/board/t/6a2248c0-5d7a-4fbb-93bd-78270e404170/Microsoft.RequirementCategory)
 # StockPortfolio
 
 Hi everyone! Welcome to Stock Portfolio - an application where you can track changes in stock prices and perform CRUD operations on a set of stocks that you can choose to add to your portfolio. 
